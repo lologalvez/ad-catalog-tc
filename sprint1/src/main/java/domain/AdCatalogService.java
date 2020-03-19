@@ -27,8 +27,19 @@ public class AdCatalogService {
     public AdId add(String title, String description, AdCatalogId adCatalogId) {
         AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId);
         if (adCatalog == null) throw new AdCatalogDoesNotExistException();
-        return null;
+
+        AdId adId = new AdId(uuidProvider.getUUID());
+        Ad ad = Ad.create()
+                .withId(adId)
+                .withTitle(title)
+                .withDescription(description)
+                .withPublicationDate(timeService.getDate()).build();
+
+        adCatalog.add(ad);
+        adCatalogRepository.save(adCatalog);
+        return adId;
     }
+
 
 
 }

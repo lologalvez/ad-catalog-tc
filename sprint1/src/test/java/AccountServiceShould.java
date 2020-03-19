@@ -1,11 +1,9 @@
 import domain.AdCatalogService;
-import domain.catalog.Ad;
-import domain.catalog.AdCatalog;
-import domain.catalog.AdCatalogRepository;
-import domain.catalog.AdCatalogId;
+import domain.catalog.*;
 import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.timeservice.TimeService;
 import domain.uuid.UUIDProvider;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -52,4 +50,26 @@ public class AccountServiceShould {
         Assertions.assertThrows(AdCatalogDoesNotExistException.class,
                 () -> adCatalogService.add("Title", "Description", adCatalogId));
     }
+
+    @Test
+    public void add_ad_to_catalog_and_save_it() {
+        UUID uuid = UUID.randomUUID();
+        AdCatalogId adCatalogId = new AdCatalogId(uuid);
+        AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        when(adCatalogRepository.findById(adCatalogId)).thenReturn(adCatalog);
+        when(uuidProvider.getUUID()).thenReturn(uuid);
+        when(timeService.getDate()).thenReturn("11/11/2011");
+        AdId adId = new AdId(uuid);
+        Ad ad = Ad.create()
+                .withId(adId)
+                .withTitle("Title")
+                .withDescription("Description")
+                .withPublicationDate("11/11/2011").build();
+
+        AdId expected = adCatalogService.add("Title", "Description", adCatalogId);
+
+        verify(adCatalogRepository).save(adCatalog);
+        Assert.assertEquals(expected, adId);
+    }
+
 }

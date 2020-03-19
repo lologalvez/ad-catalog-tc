@@ -4,7 +4,6 @@ import domain.exceptions.EmptyDescriptionException;
 import domain.exceptions.EmptyTitleException;
 import domain.exceptions.SameTitleAndDescriptionException;
 import domain.exceptions.TitleLongerThanFiftyCharactersException;
-
 import java.util.Objects;
 
 public class Ad {
@@ -12,11 +11,13 @@ public class Ad {
     private final String title;
     private final String description;
     private final String date;
+    private final AdId id;
 
-    private Ad(String title, String description, String date) {
+    private Ad(String title, String description, String date, AdId adId) {
         this.title = title;
         this.description = description;
         this.date = date;
+        this.id = adId;
     }
 
 
@@ -29,6 +30,7 @@ public class Ad {
         private String title;
         private String description;
         private String date;
+        private AdId id;
 
         public AdBuilder withTitle(String title) {
             if (title.isEmpty()) throw new EmptyTitleException();
@@ -48,9 +50,14 @@ public class Ad {
             return this;
         }
 
+        public AdBuilder withId(AdId adId) {
+            this.id = adId;
+            return this;
+        }
+
         public Ad build() {
             if (this.title.equals(this.description)) throw new SameTitleAndDescriptionException();
-            return new Ad(this.title, this.description, this.date);
+            return new Ad(this.title, this.description, this.date, this.id);
         }
     }
 
@@ -61,9 +68,10 @@ public class Ad {
 
         Ad ad = (Ad) o;
 
-        if (!Objects.equals(title, ad.title)) return false;
-        if (!Objects.equals(description, ad.description)) return false;
-        return Objects.equals(date, ad.date);
+        if (title != null ? !title.equals(ad.title) : ad.title != null) return false;
+        if (description != null ? !description.equals(ad.description) : ad.description != null) return false;
+        if (date != null ? !date.equals(ad.date) : ad.date != null) return false;
+        return id != null ? id.equals(ad.id) : ad.id == null;
     }
 
     @Override
@@ -71,6 +79,7 @@ public class Ad {
         int result = title != null ? title.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
     }
 }
