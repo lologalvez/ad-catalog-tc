@@ -72,4 +72,15 @@ public class AccountServiceShould {
         Assert.assertEquals(expected, adId);
     }
 
+    @Test
+    public void not_allow_removing_ads_from_unexisting_catalog() {
+        UUID uuid = UUID.randomUUID();
+        AdCatalogId adCatalogId = new AdCatalogId(uuid);
+        AdId adId = new AdId(uuid);
+
+
+        Assertions.assertThrows(AdCatalogDoesNotExistException.class,
+                () -> adCatalogService.remove(adId, adCatalogId));
+    }
+
 }

@@ -40,6 +40,12 @@ public class AdCatalogService {
         return adId;
     }
 
+    public void remove(AdId adId, AdCatalogId adCatalogId) {
+        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId);
+        if (adCatalog == null) throw new AdCatalogDoesNotExistException();
+
+    }
+
 
 
 }
