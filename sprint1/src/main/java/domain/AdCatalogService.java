@@ -1,9 +1,7 @@
 package domain;
 
-import domain.catalog.Ad;
-import domain.catalog.AdCatalog;
-import domain.catalog.AdCatalogRepository;
-import domain.catalog.AdCatalogId;
+import domain.catalog.*;
+import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.timeservice.TimeService;
 import domain.uuid.UUIDProvider;
 
@@ -24,6 +22,12 @@ public class AdCatalogService {
         AdCatalog adCatalog = new AdCatalog(adCatalogId);
         adCatalogRepository.save(adCatalog);
         return adCatalogId;
+    }
+
+    public AdId add(String title, String description, AdCatalogId adCatalogId) {
+        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId);
+        if (adCatalog == null) throw new AdCatalogDoesNotExistException();
+        return null;
     }
 
 
