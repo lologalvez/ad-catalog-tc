@@ -1,3 +1,4 @@
+import domain.catalog.Ad;
 import domain.exceptions.SameTitleAndDescriptionException;
 import domain.exceptions.TitleLongerThanFiftyCharactersException;
 import org.junit.Test;

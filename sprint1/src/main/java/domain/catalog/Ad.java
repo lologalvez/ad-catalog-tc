@@ -1,3 +1,5 @@
+package domain.catalog;
+
 import domain.exceptions.SameTitleAndDescriptionException;
 import domain.exceptions.TitleLongerThanFiftyCharactersException;
 
