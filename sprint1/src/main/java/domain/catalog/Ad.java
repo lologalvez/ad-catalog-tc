@@ -26,6 +26,10 @@ public class Ad {
 
     }
 
+    public boolean hasSameTitleAndDescription(Ad ad) {
+        return this.title == ad.title && this.description == ad.description;
+    }
+
     public static class AdBuilder {
         private String title;
         private String description;

@@ -2,8 +2,8 @@ package domain;
 
 import domain.catalog.*;
 import domain.exceptions.AdCatalogDoesNotExistException;
-import domain.timeservice.TimeService;
-import domain.uuid.UUIDProvider;
+import domain.domainservices.timeservice.TimeService;
+import domain.domainservices.uuidservice.UUIDProvider;
 
 public class AdCatalogService {
 
@@ -35,7 +35,7 @@ public class AdCatalogService {
                 .withDescription(description)
                 .withPublicationDate(timeService.getDate()).build();
 
-        adCatalog.add(ad);
+        adCatalog.add(adId, ad);
         adCatalogRepository.save(adCatalog);
         return adId;
     }
@@ -43,6 +43,8 @@ public class AdCatalogService {
     public void remove(AdId adId, AdCatalogId adCatalogId) {
         AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId);
         if (adCatalog == null) throw new AdCatalogDoesNotExistException();
+
+        adCatalog.remove(adId);
 
     }
 

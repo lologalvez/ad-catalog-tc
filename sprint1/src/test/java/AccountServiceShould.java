@@ -1,8 +1,8 @@
 import domain.AdCatalogService;
 import domain.catalog.*;
 import domain.exceptions.AdCatalogDoesNotExistException;
-import domain.timeservice.TimeService;
-import domain.uuid.UUIDProvider;
+import domain.domainservices.timeservice.TimeService;
+import domain.domainservices.uuidservice.UUIDProvider;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

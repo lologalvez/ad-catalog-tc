@@ -1,16 +1,11 @@
-import domain.catalog.AdCatalogId;
-import domain.catalog.AdCollection;
-import domain.catalog.Ad;
-import domain.catalog.AdCatalog;
+import domain.catalog.*;
 import domain.exceptions.AdAlreadyExistsInTheCatalogException;
 import domain.exceptions.AdDoesNotExistInTheCatalog;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class AdCatalogShould {
 
@@ -18,41 +13,42 @@ public class AdCatalogShould {
     public void not_allow_an_ad_in_the_catalog_if_already_exists_an_ad_with_same_title_and_description() {
         AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
         AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdId adId = new AdId(UUID.randomUUID());
         Ad ad =  Ad.create()
+                .withId(adId)
                 .withTitle("Title")
                 .withDescription("Description")
                 .withPublicationDate("11/11/2011").build();
 
-        adCatalog.add(ad);
+        adCatalog.add(adId, ad);
 
-        Assertions.assertThrows(AdAlreadyExistsInTheCatalogException.class, () -> adCatalog.add(ad));
+        Assertions.assertThrows(AdAlreadyExistsInTheCatalogException.class, () -> adCatalog.add(adId, ad));
     }
 
     @Test
     public void not_allow_removing_an_ad_if_it_does_not_exist_in_the_catalog() {
         AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
         AdCatalog adCatalog = new AdCatalog(adCatalogId);
-        Ad ad =  Ad.create()
-                .withTitle("Title")
-                .withDescription("Description")
-                .withPublicationDate("11/11/2011").build();
+        AdId adId = new AdId(UUID.randomUUID());
 
-        Assertions.assertThrows(AdDoesNotExistInTheCatalog.class, () -> adCatalog.remove(ad));
+        Assertions.assertThrows(AdDoesNotExistInTheCatalog.class, () -> adCatalog.remove(adId));
     }
 
     @Test
     public void return_a_list_containing_all_the_ads_in_the_catalog_when_requested() {
         AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
         AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdId adId = new AdId(UUID.randomUUID());
         Ad ad =  Ad.create()
+                .withId(adId)
                 .withTitle("Title")
                 .withDescription("Description")
                 .withPublicationDate("11/11/2011").build();
 
-        List<Ad> adList = new ArrayList<>();
-        adList.add(ad);
-        AdCollection adCollection = new AdCollection(adList);
-        adCatalog.add(ad);
+        Map<AdId, Ad> adMap = new LinkedHashMap<>();
+        adMap.put(adId, ad);
+        AdCollection adCollection = new AdCollection(adMap);
+        adCatalog.add(adId, ad);
 
         Assert.assertEquals(adCollection, adCatalog.list());
     }

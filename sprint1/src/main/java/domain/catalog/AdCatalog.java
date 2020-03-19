@@ -3,28 +3,28 @@ package domain.catalog;
 import domain.exceptions.AdAlreadyExistsInTheCatalogException;
 import domain.exceptions.AdDoesNotExistInTheCatalog;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class AdCatalog {
 
-    private final List<Ad> ads;
+    private final Map<AdId, Ad> ads;
     private AdCatalogId adCatalogId;
 
     public AdCatalog(AdCatalogId adCatalogId) {
         this.adCatalogId = adCatalogId;
-        this.ads = new ArrayList<>();
+        this.ads = new LinkedHashMap<>();
     }
 
-    public void add(Ad ad) {
-        if (this.ads.contains(ad)) throw new AdAlreadyExistsInTheCatalogException();
-        this.ads.add(ad);
+    public void add(AdId adId, Ad ad) {
+        for (AdId existingAdId : ads.keySet()) {
+           if (this.ads.get(existingAdId).hasSameTitleAndDescription(ad)) throw new AdAlreadyExistsInTheCatalogException();
+        }
+        this.ads.put(adId, ad);
     }
 
-    public void remove(Ad ad) {
-        if (this.ads.contains(ad) == false) throw new AdDoesNotExistInTheCatalog();
-        this.ads.remove(ad);
+    public void remove(AdId adId) {
+        if (this.ads.containsKey(adId) == false) throw new AdDoesNotExistInTheCatalog();
+        this.ads.remove(adId);
     }
 
     public AdCollection list() {

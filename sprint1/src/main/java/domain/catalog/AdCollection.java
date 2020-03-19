@@ -1,32 +1,28 @@
 package domain.catalog;
-
-import domain.catalog.Ad;
-
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class AdCollection {
 
-    private List<Ad> adList;
+    private final Map<AdId, Ad> adMap;
 
-    public AdCollection(List<Ad> adList) {
-        this.adList = adList;
+    public AdCollection(Map<AdId, Ad> adMap) {
+        this.adMap = adMap;
     }
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         AdCollection that = (AdCollection) o;
 
-        return Objects.equals(adList, that.adList);
+        return Objects.equals(adMap, that.adMap);
     }
 
     @Override
     public int hashCode() {
-        return adList != null ? adList.hashCode() : 0;
+        return adMap != null ? adMap.hashCode() : 0;
     }
 }
 

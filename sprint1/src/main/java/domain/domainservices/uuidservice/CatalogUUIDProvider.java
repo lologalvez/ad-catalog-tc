@@ -1,4 +1,4 @@
-package domain.uuid;
+package domain.domainservices.uuidservice;
 
 import java.util.UUID;
 
