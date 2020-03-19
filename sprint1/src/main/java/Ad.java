@@ -1,3 +1,4 @@
+import domain.exceptions.SameTitleAndDescriptionException;
 import domain.exceptions.TitleLongerThanFiftyCharactersException;
 
 import java.util.Objects;
@@ -42,6 +43,7 @@ public class Ad {
         }
 
         public Ad build() {
+            if (this.title.equals(this.description)) throw new SameTitleAndDescriptionException();
             return new Ad(this.title, this.description, this.date);
         }
     }
