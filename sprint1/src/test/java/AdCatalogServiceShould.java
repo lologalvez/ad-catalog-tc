@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class AccountServiceShould {
+public class AdCatalogServiceShould {
 
     @Mock AdCatalogRepository adCatalogRepository;
     @Mock TimeService timeService;
