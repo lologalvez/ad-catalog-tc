@@ -83,4 +83,23 @@ public class AccountServiceShould {
                 () -> adCatalogService.remove(adId, adCatalogId));
     }
 
+    @Test
+    public void remove_ad_from_catalog_and_save_it() {
+        UUID uuid = UUID.randomUUID();
+        AdCatalogId adCatalogId = new AdCatalogId(uuid);
+        AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdId adId = new AdId(uuid);
+        Ad ad = Ad.create()
+                .withId(adId)
+                .withTitle("Title")
+                .withDescription("Description")
+                .withPublicationDate("11/11/2011").build();
+        adCatalog.add(adId, ad);
+        when(adCatalogRepository.findById(adCatalogId)).thenReturn(adCatalog);
+
+        adCatalogService.remove(adId, adCatalogId);
+
+        verify(adCatalogRepository).save(adCatalog);
+    }
+
 }
