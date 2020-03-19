@@ -1,3 +1,4 @@
+import domain.catalog.AdCatalogId;
 import domain.catalog.AdCollection;
 import domain.catalog.Ad;
 import domain.catalog.AdCatalog;
@@ -9,12 +10,14 @@ import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class AdCatalogShould {
 
     @Test
     public void not_allow_an_ad_in_the_catalog_if_already_exists_an_ad_with_same_title_and_description() {
-        AdCatalog adCatalog = new AdCatalog();
+        AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog adCatalog = new AdCatalog(adCatalogId);
         Ad ad =  Ad.create()
                 .withTitle("Title")
                 .withDescription("Description")
@@ -27,7 +30,8 @@ public class AdCatalogShould {
 
     @Test
     public void not_allow_removing_an_ad_if_it_does_not_exist_in_the_catalog() {
-        AdCatalog adCatalog = new AdCatalog();
+        AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog adCatalog = new AdCatalog(adCatalogId);
         Ad ad =  Ad.create()
                 .withTitle("Title")
                 .withDescription("Description")
@@ -38,7 +42,8 @@ public class AdCatalogShould {
 
     @Test
     public void return_a_list_containing_all_the_ads_in_the_catalog_when_requested() {
-        AdCatalog adCatalog = new AdCatalog();
+        AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog adCatalog = new AdCatalog(adCatalogId);
         Ad ad =  Ad.create()
                 .withTitle("Title")
                 .withDescription("Description")
