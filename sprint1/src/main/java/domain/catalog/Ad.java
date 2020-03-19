@@ -1,5 +1,7 @@
 package domain.catalog;
 
+import domain.exceptions.EmptyDescriptionException;
+import domain.exceptions.EmptyTitleException;
 import domain.exceptions.SameTitleAndDescriptionException;
 import domain.exceptions.TitleLongerThanFiftyCharactersException;
 
@@ -29,12 +31,14 @@ public class Ad {
         private String date;
 
         public AdBuilder withTitle(String title) {
+            if (title.isEmpty()) throw new EmptyTitleException();
             if (title.length() > 50) throw new TitleLongerThanFiftyCharactersException();
             this.title = title;
             return this;
         }
 
         public AdBuilder withDescription(String description) {
+            if (description.isEmpty()) throw new EmptyDescriptionException();
             this.description = description;
             return this;
         }
