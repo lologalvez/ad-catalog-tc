@@ -3,8 +3,10 @@ package adcatalog.models.entities;
 import adcatalog.domain.models.valueobjects.UserId;
 import adcatalog.domain.models.entities.User;
 import adcatalog.domain.models.valueobjects.AdId;
+import adcatalog.domain.models.exceptions.AdAlreadyFavorited;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.UUID;
 
@@ -25,6 +27,16 @@ public class UserShould {
 
         Assert.assertEquals(userOne, userTwo);
 
+    }
+
+    @Test
+    public void not_allow_fav_an_ad_already_favorited() {
+        AdId adId = new AdId(UUID.randomUUID());
+        UserId userId = new UserId(UUID.randomUUID());
+        User user = new User(userId);
+        user.favAd(adId);
+
+        Assertions.assertThrows(AdAlreadyFavorited.class, () -> user.favAd(adId));
     }
 
 }

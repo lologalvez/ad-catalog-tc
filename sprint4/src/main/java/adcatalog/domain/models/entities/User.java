@@ -1,5 +1,6 @@
 package adcatalog.domain.models.entities;
 
+import adcatalog.domain.models.exceptions.AdAlreadyFavorited;
 import adcatalog.domain.models.valueobjects.AdId;
 import adcatalog.domain.models.valueobjects.UserId;
 
@@ -18,6 +19,7 @@ public class User {
     }
 
     public void favAd(AdId adId) {
+        if (this.favs.contains(adId)) throw new AdAlreadyFavorited();
         this.favs.add(adId);
     }
 
