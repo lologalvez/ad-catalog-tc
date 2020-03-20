@@ -47,10 +47,10 @@ public class AdCatalogShould {
 
         Map<AdId, Ad> adMap = new LinkedHashMap<>();
         adMap.put(adId, ad);
-        AdCollection adCollection = new AdCollection(adMap);
+        AdListing adListing = new AdListing(adMap);
         adCatalog.add(adId, ad);
 
-        Assert.assertEquals(adCollection, adCatalog.list());
+        Assert.assertEquals(adListing, adCatalog.list());
     }
 
 }

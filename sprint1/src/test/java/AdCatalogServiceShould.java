@@ -103,4 +103,33 @@ public class AdCatalogServiceShould {
         verify(adCatalogRepository).save(adCatalog);
     }
 
+    @Test
+    public void not_list_any_ad_when_catalog_does_not_exist() {
+        UUID uuid = UUID.randomUUID();
+        AdCatalogId adCatalogId = new AdCatalogId(uuid);
+
+        Assertions.assertThrows(AdCatalogDoesNotExistException.class,
+                () -> adCatalogService.listAds(adCatalogId));
+    }
+
+    @Test
+    public void list_all_ads_from_a_given_catalog() {
+        UUID uuid = UUID.randomUUID();
+        AdCatalogId adCatalogId = new AdCatalogId(uuid);
+        AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdId adId = new AdId(uuid);
+        Ad ad = Ad.create()
+                .withId(adId)
+                .withTitle("Title")
+                .withDescription("Description")
+                .withPublicationDate("11/11/2011").build();
+        adCatalog.add(adId, ad);
+        AdListing expectedAdListing = adCatalog.list();
+        when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
+
+        AdListing adListing = adCatalogService.listAds(adCatalogId);
+
+        Assert.assertEquals(expectedAdListing, adListing);
+    }
+
 }

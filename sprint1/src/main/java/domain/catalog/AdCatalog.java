@@ -27,8 +27,8 @@ public class AdCatalog {
         this.ads.remove(adId);
     }
 
-    public AdCollection list() {
-        return new AdCollection(this.ads);
+    public AdListing list() {
+        return new AdListing(this.ads);
     }
 
     @Override

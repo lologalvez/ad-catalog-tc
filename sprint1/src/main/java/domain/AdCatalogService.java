@@ -5,8 +5,6 @@ import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
 import domain.domainservices.uuidservice.UUIDProvider;
 
-import java.util.Optional;
-
 public class AdCatalogService {
 
     private final AdCatalogRepository adCatalogRepository;
@@ -47,4 +45,8 @@ public class AdCatalogService {
         adCatalogRepository.save(adCatalog);
     }
 
+    public AdListing listAds(AdCatalogId adCatalogId) {
+        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
+        return adCatalog.list();
+    }
 }

@@ -2,11 +2,11 @@ package domain.catalog;
 import java.util.Map;
 import java.util.Objects;
 
-public class AdCollection {
+public class AdListing {
 
     private final Map<AdId, Ad> adMap;
 
-    public AdCollection(Map<AdId, Ad> adMap) {
+    public AdListing(Map<AdId, Ad> adMap) {
         this.adMap = adMap;
     }
 
@@ -15,7 +15,7 @@ public class AdCollection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AdCollection that = (AdCollection) o;
+        AdListing that = (AdListing) o;
 
         return Objects.equals(adMap, that.adMap);
     }
