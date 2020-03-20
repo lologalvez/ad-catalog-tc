@@ -11,11 +11,13 @@ import java.util.*;
 public class AdCatalog {
 
     private final Map<AdId, Ad> ads;
+    private final int maxAdLimit;
     private AdCatalogId adCatalogId;
 
     public AdCatalog(AdCatalogId adCatalogId) {
         this.adCatalogId = adCatalogId;
         this.ads = new LinkedHashMap<>();
+        this.maxAdLimit = 100;
     }
 
     public void add(AdId adId, Ad ad) {
