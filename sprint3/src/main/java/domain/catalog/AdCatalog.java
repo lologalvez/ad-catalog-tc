@@ -75,8 +75,9 @@ public class AdCatalog {
         }
     }
 
-    public void findAdById(AdId adId) {
+    public Ad findAdById(AdId adId) {
         if (this.ads.containsKey(adId) == false ) throw new AdDoesNotExistInTheCatalog();
+        return this.ads.get(adId);
     }
 
     public AdCatalogId getCatalogId() {

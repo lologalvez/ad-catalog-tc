@@ -191,5 +191,32 @@ public class AdCatalogShould {
        Assertions.assertThrows(AdDoesNotExistInTheCatalog.class, () -> adCatalog.findAdById(adId));
     }
 
+    @Test
+    public void retrieve_a_specific_ad_when_an_existing_adId_is_passed() {
+        AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(2)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
+        AdId adIdOne = new AdId(UUID.randomUUID());
+        Ad adOne = Ad.create()
+                .withId(adIdOne)
+                .withTitle(new AdTitle("Title 1"))
+                .withDescription(new AdDescription("Description 1"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("19/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+
+        adCatalog.add(adIdOne, adOne);
+
+        Assert.assertEquals(adOne, adCatalog.findAdById(adIdOne));
+
+
+
+
+
+    }
+
 
 }
