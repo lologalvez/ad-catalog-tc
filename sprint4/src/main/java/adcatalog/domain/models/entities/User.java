@@ -1,6 +1,7 @@
 package adcatalog.domain.models.entities;
 
 import adcatalog.domain.models.exceptions.AdAlreadyFavorited;
+import adcatalog.domain.models.exceptions.AdIsNotInUsersFavsException;
 import adcatalog.domain.models.valueobjects.AdId;
 import adcatalog.domain.models.valueobjects.UserId;
 
@@ -24,7 +25,8 @@ public class User {
     }
 
     public void unFavAd(AdId adId) {
-        if (this.favs.contains(adId)) this.favs.remove(adId);
+        if (!this.favs.contains(adId)) throw new AdIsNotInUsersFavsException();
+        this.favs.remove(adId);
     }
 
     @Override
