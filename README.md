@@ -4,7 +4,7 @@ The application has been developed incrementally in four sprints. In each sprint
 
 Every sprint was the starting point for the next. In each sprint not only new features were added, but also changes in regards o software design and directory structure.
 
-I decided to consider the Ad Catalog the aggregate of this application. I tried to apply a Unit Of Work pattern for this entity and its repository. Persistence its done on every change to the entity, but can be approach in different ways if performance is an issue.
+I decided to consider the Ad Catalog the aggregate of this application. I tried to apply a Unit Of Work pattern for this entity and its repository. Persistence its done on every change to the entity, but this can be approached in different ways if performance is an issue.
 
 I also tried to design the application following the principles of Hexagonal Architecture.
 
