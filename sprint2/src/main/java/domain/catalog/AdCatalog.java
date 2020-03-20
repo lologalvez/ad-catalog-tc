@@ -13,19 +13,36 @@ public class AdCatalog {
 
     private final Map<AdId, Ad> ads;
     private final int maxAdLimit;
+    private final ExpirationStrategy expirationStrategy;
     private AdCatalogId adCatalogId;
 
-    public AdCatalog(AdCatalogId adCatalogId) {
-        this.adCatalogId = adCatalogId;
-        this.ads = new LinkedHashMap<>();
-        this.maxAdLimit = 100;
+    private AdCatalog(int maxAdLimit, ExpirationStrategy expirationStrategy, AdCatalogId id) {
+        this.maxAdLimit = maxAdLimit;
+        this.expirationStrategy = expirationStrategy;
+        this.adCatalogId = id;
+        this.ads = new HashMap<>();
+    }
+
+    public static AdCatalogBuilder create() {
+        return new AdCatalogBuilder();
     }
 
     public void add(AdId adId, Ad ad) {
         for (AdId existingAdId : ads.keySet()) {
            if (this.ads.get(existingAdId).hasSameTitleAndDescription(ad)) throw new AdAlreadyExistsInTheCatalogException();
         }
+
+        if (this.ads.size() == this.maxAdLimit && !this.ads.isEmpty()) {
+            AdId adIdToBeRemoved = this.findOldestAd();
+            this.ads.remove(adIdToBeRemoved);
+        }
         this.ads.put(adId, ad);
+    }
+
+    public AdId findOldestAd() {
+        List<Map.Entry<AdId, Ad>> adsList = new LinkedList<>(this.ads.entrySet());
+        Collections.sort(adsList, Comparator.comparing(entry -> entry.getValue().serialize().publicationDate.date));
+        return adsList.get(0).getKey();
     }
 
     public void remove(AdId adId) {
@@ -33,11 +50,11 @@ public class AdCatalog {
         this.ads.remove(adId);
     }
 
-    public AdCatalogDTO list() {
+    public AdCatalogDTO listAds() {
         return this.serialize();
     }
 
-    private AdCatalogDTO serialize() {
+    public AdCatalogDTO serialize() {
         AdCatalogDTO adCatalogDTO = new AdCatalogDTO();
         adCatalogDTO.adCatalogId = this.adCatalogId.serialize();
         adCatalogDTO.ads = new ArrayList<>();
@@ -47,7 +64,7 @@ public class AdCatalog {
         return adCatalogDTO;
     }
 
-    public void purgeAdsTilDate(AdPublicationDate limitDate) {
+    public void purgeAdsOlderThanDate(AdPublicationDate limitDate) {
         List<AdId> removableAdIds = new ArrayList<>();
         for (AdId adId : ads.keySet()) {
             Ad storedAd = this.ads.get(adId);
@@ -60,6 +77,32 @@ public class AdCatalog {
 
     public AdCatalogId getCatalogId() {
         return this.adCatalogId;
+    }
+
+    public static class AdCatalogBuilder {
+
+        private int maxAdStorageLimit;
+        private ExpirationStrategy expirationStrategy;
+        private AdCatalogId id;
+
+        public AdCatalogBuilder withAdStorageLimit(int maxAdStorageLimit) {
+            this.maxAdStorageLimit = maxAdStorageLimit;
+            return this;
+        }
+
+        public AdCatalogBuilder withExpirationStrategy(ExpirationStrategy expirationStrategy) {
+            this.expirationStrategy = expirationStrategy;
+            return this;
+        }
+
+        public AdCatalogBuilder withId(AdCatalogId adCatalogId) {
+            this.id = adCatalogId;
+            return this;
+        }
+
+        public AdCatalog build() {
+            return new AdCatalog(this.maxAdStorageLimit, this.expirationStrategy, this.id);
+        }
     }
 
     @Override

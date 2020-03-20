@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,7 +39,12 @@ public class AdCatalogServiceShould {
     public void create_and_save_a_new_ad_catalog() {
         UUID uuid = UUID.randomUUID();
         AdCatalogId adCatalogId = new AdCatalogId(uuid);
-        AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(100)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
         when(uuidProvider.getUUID()).thenReturn(uuid);
 
         adCatalogService.createCatalog();
@@ -61,7 +65,12 @@ public class AdCatalogServiceShould {
     public void add_ad_to_catalog_and_save_it() {
         UUID uuid = UUID.randomUUID();
         AdCatalogId adCatalogId = new AdCatalogId(uuid);
-        AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(100)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
         when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
         when(uuidProvider.getUUID()).thenReturn(uuid);
         when(timeService.getDate()).thenReturn(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy")));
@@ -94,7 +103,12 @@ public class AdCatalogServiceShould {
     public void remove_ad_from_catalog_and_save_it() {
         UUID uuid = UUID.randomUUID();
         AdCatalogId adCatalogId = new AdCatalogId(uuid);
-        AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdCatalog adCatalog =AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(100)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
         AdId adId = new AdId(uuid);
         Ad ad = Ad.create()
                 .withId(adId)
@@ -123,7 +137,12 @@ public class AdCatalogServiceShould {
     public void list_all_ads_from_a_given_catalog() {
         UUID uuid = UUID.randomUUID();
         AdCatalogId adCatalogId = new AdCatalogId(uuid);
-        AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(100)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
         AdId adId = new AdId(uuid);
         Ad ad = Ad.create()
                 .withId(adId)
@@ -132,7 +151,7 @@ public class AdCatalogServiceShould {
                 .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
                 .build();
         adCatalog.add(adId, ad);
-        AdCatalogDTO expectedAdListing = adCatalog.list();
+        AdCatalogDTO expectedAdListing = adCatalog.listAds();
         when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
 
         AdCatalogDTO adListing = adCatalogService.listAds(adCatalogId);

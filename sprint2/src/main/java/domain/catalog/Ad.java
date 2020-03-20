@@ -29,7 +29,6 @@ public class Ad {
 
     public static AdBuilder create() {
         return new AdBuilder();
-
     }
 
     public boolean hasSameTitleAndDescription(Ad ad) {
@@ -40,7 +39,7 @@ public class Ad {
         AdDTO adDTO = new AdDTO();
         adDTO.title = this.title.serialize();
         adDTO.description = this.description.serialize();
-        adDTO.date = this.publicationDate.serialize();
+        adDTO.publicationDate = this.publicationDate.serialize();
         adDTO.id = this.id.serialize();
         return adDTO;
     }

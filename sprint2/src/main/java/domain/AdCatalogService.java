@@ -7,10 +7,6 @@ import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
 import domain.domainservices.uuidservice.UUIDProvider;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 public class AdCatalogService {
 
     private final AdCatalogRepository adCatalogRepository;
@@ -25,7 +21,12 @@ public class AdCatalogService {
 
     public AdCatalogId createCatalog() {
         AdCatalogId adCatalogId = new AdCatalogId(uuidProvider.getUUID());
-        AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(100)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
         adCatalogRepository.save(adCatalog);
         return adCatalogId;
     }
@@ -38,7 +39,7 @@ public class AdCatalogService {
                 .withId(adId)
                 .withTitle(title)
                 .withDescription(description)
-                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .withPublicationDate(new AdPublicationDate(timeService.getDate()))
                 .build();
 
         adCatalog.add(adId, ad);
@@ -54,6 +55,8 @@ public class AdCatalogService {
 
     public AdCatalogDTO listAds(AdCatalogId adCatalogId) {
         AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
-        return adCatalog.list();
+        return adCatalog.listAds();
     }
+
+
 }
