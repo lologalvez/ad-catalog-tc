@@ -159,4 +159,39 @@ public class AdCatalogServiceShould {
         Assert.assertEquals(expectedAdListing, adListing);
     }
 
+    @Test
+    public void purge_ads_older_than_given_date_and_save_updated_catalog() {
+        UUID uuid = UUID.randomUUID();
+        AdCatalogId adCatalogId = new AdCatalogId(uuid);
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(100)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
+        AdId adId = new AdId(uuid);
+        Ad ad = Ad.create()
+                .withId(adId)
+                .withTitle(new AdTitle("Title"))
+                .withDescription(new AdDescription("Description"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+        adCatalog.add(adId, ad);
+
+        when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
+
+
+        AdPublicationDate limitDate = new AdPublicationDate(LocalDate.parse("21/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        adCatalogService.purgeAdsOlderThanDate(limitDate, adCatalogId);
+
+        AdCatalog expectedCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(100)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
+        verify(adCatalogRepository).save(expectedCatalog);
+
+    }
+
 }

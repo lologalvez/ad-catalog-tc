@@ -58,5 +58,9 @@ public class AdCatalogService {
         return adCatalog.listAds();
     }
 
-
+    public void purgeAdsOlderThanDate(AdPublicationDate limitDate, AdCatalogId adCatalogId) {
+        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
+        adCatalog.purgeAdsOlderThanDate(limitDate);
+        adCatalogRepository.save(adCatalog);
+    }
 }
