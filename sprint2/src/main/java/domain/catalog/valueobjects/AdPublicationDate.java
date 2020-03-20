@@ -1,14 +1,15 @@
 package domain.catalog.valueobjects;
 
-import domain.catalog.Ad;
 import domain.catalog.serialized.AdPublicationDateDTO;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class AdPublicationDate {
-    private String date;
+    private LocalDate date;
 
-    public AdPublicationDate(String date) {
+    public AdPublicationDate(LocalDate date) {
         this.date = date;
     }
 

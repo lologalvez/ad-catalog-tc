@@ -1,9 +1,11 @@
 package domain.catalog.serialized;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class AdPublicationDateDTO {
-    public String date;
+    public LocalDate date;
 
     @Override
     public boolean equals(Object o) {

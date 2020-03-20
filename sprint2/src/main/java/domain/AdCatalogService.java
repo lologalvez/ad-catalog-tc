@@ -2,13 +2,14 @@ package domain;
 
 import domain.catalog.*;
 import domain.catalog.serialized.AdCatalogDTO;
-import domain.catalog.valueobjects.AdCatalogId;
-import domain.catalog.valueobjects.AdDescription;
-import domain.catalog.valueobjects.AdId;
-import domain.catalog.valueobjects.AdTitle;
+import domain.catalog.valueobjects.*;
 import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
 import domain.domainservices.uuidservice.UUIDProvider;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AdCatalogService {
 
@@ -37,7 +38,8 @@ public class AdCatalogService {
                 .withId(adId)
                 .withTitle(title)
                 .withDescription(description)
-                .withPublicationDate(timeService.getDate()).build();
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
 
         adCatalog.add(adId, ad);
         adCatalogRepository.save(adCatalog);

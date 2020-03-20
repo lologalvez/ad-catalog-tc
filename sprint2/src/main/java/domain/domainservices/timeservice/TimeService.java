@@ -1,5 +1,8 @@
 package domain.domainservices.timeservice;
 
+import java.time.LocalDate;
+
 public interface TimeService {
-    String getDate();
+    LocalDate getDate();
+    String formatDate(LocalDate date);
 }

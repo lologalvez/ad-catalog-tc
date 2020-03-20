@@ -15,6 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
@@ -35,7 +38,7 @@ public class AdCatalogListAdsFeature {
 
     @Test
     public void list_all_ads_from_a_given_catalog() {
-        when(timeService.getDate()).thenReturn("11/11/2011", "12/11/2011", "13/11/2011");
+        when(timeService.getDate()).thenReturn(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         when(uuidProvider.getUUID()).thenReturn(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
         AdCatalogId adCatalogId = adCatalogService.createCatalog();
         AdId adIdOne = adCatalogService.addAd(new AdTitle("Acceptance title 1"), new AdDescription("Acceptance Description 1"), adCatalogId);
@@ -46,8 +49,8 @@ public class AdCatalogListAdsFeature {
 
         AdCatalogDTO adCatalogDTO = adCatalogService.listAds(adCatalogId);
         String expected = "AdCatalogId: " + adCatalogId.serialize().id + "\n" +
-        "Ad: {id: " + adIdOne.serialize().id + ", title: Acceptance title 1, description: Acceptance Description 1, publication_date: 11/11/2011}\n" +
-        "Ad: {id: " + adIdThree.serialize().id + ", title: Acceptance title 3, description: Acceptance Description 3, publication_date: 13/11/2011}\n";
+        "Ad: {id: " + adIdOne.serialize().id + ", title: Acceptance title 1, description: Acceptance Description 1, publication_date: 2020-03-20}\n" +
+        "Ad: {id: " + adIdThree.serialize().id + ", title: Acceptance title 3, description: Acceptance Description 3, publication_date: 2020-03-20}\n";
 
         Assert.assertEquals(expected, adCatalogDTO.toString());
     }

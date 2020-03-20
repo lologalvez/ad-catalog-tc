@@ -48,7 +48,7 @@ public class Ad {
     public static class AdBuilder {
         private AdTitle title;
         private AdDescription description;
-        private String date;
+        private AdPublicationDate date;
         private AdId id;
 
         public AdBuilder withTitle(AdTitle title) {
@@ -64,7 +64,7 @@ public class Ad {
             return this;
         }
 
-        public AdBuilder withPublicationDate(String date) {
+        public AdBuilder withPublicationDate(AdPublicationDate date) {
             this.date = date;
             return this;
         }
@@ -78,7 +78,7 @@ public class Ad {
             String serializedTitle = this.title.serialize().title;
             String serializedDescription = this.description.serialize().description;
             if (serializedTitle.equals(serializedDescription)) throw new SameTitleAndDescriptionException();
-            return new Ad(this.title, this.description, new AdPublicationDate(this.date), this.id);
+            return new Ad(this.title, this.description, this.date, this.id);
         }
     }
 

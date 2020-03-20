@@ -1,10 +1,7 @@
 import domain.AdCatalogService;
 import domain.catalog.*;
 import domain.catalog.serialized.AdCatalogDTO;
-import domain.catalog.valueobjects.AdCatalogId;
-import domain.catalog.valueobjects.AdDescription;
-import domain.catalog.valueobjects.AdId;
-import domain.catalog.valueobjects.AdTitle;
+import domain.catalog.valueobjects.*;
 import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
 import domain.domainservices.uuidservice.UUIDProvider;
@@ -16,6 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -64,13 +64,14 @@ public class AdCatalogServiceShould {
         AdCatalog adCatalog = new AdCatalog(adCatalogId);
         when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
         when(uuidProvider.getUUID()).thenReturn(uuid);
-        when(timeService.getDate()).thenReturn("11/11/2011");
+        when(timeService.getDate()).thenReturn(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         AdId adId = new AdId(uuid);
         Ad ad = Ad.create()
                 .withId(adId)
                 .withTitle(new AdTitle("Title"))
                 .withDescription(new AdDescription("Description"))
-                .withPublicationDate("11/11/2011").build();
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
 
         AdId expected = adCatalogService.addAd(new AdTitle("Title"), new AdDescription("Description"), adCatalogId);
 
@@ -99,7 +100,8 @@ public class AdCatalogServiceShould {
                 .withId(adId)
                 .withTitle(new AdTitle("Title"))
                 .withDescription(new AdDescription("Description"))
-                .withPublicationDate("11/11/2011").build();
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
         adCatalog.add(adId, ad);
         when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
 
@@ -127,7 +129,8 @@ public class AdCatalogServiceShould {
                 .withId(adId)
                 .withTitle(new AdTitle("Title"))
                 .withDescription(new AdDescription("Description"))
-                .withPublicationDate("11/11/2011").build();
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
         adCatalog.add(adId, ad);
         AdCatalogDTO expectedAdListing = adCatalog.list();
         when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));

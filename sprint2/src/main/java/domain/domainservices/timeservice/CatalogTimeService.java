@@ -1,16 +1,17 @@
 package domain.domainservices.timeservice;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class CatalogTimeService implements TimeService {
 
     @Override
-    public String getDate() {
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return dateFormat.format(date);
+    public LocalDate getDate() {
+        return LocalDate.now();
     }
+
+    public String formatDate(LocalDate date) {
+        DateTimeFormatter formatPattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return date.format(formatPattern);
+    }
+
 }

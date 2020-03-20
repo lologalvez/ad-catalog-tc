@@ -1,15 +1,15 @@
 import domain.catalog.*;
 import domain.catalog.serialized.AdCatalogDTO;
-import domain.catalog.valueobjects.AdCatalogId;
-import domain.catalog.valueobjects.AdDescription;
-import domain.catalog.valueobjects.AdId;
-import domain.catalog.valueobjects.AdTitle;
+import domain.catalog.valueobjects.*;
 import domain.exceptions.AdAlreadyExistsInTheCatalogException;
 import domain.exceptions.AdDoesNotExistInTheCatalog;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class AdCatalogShould {
@@ -23,7 +23,8 @@ public class AdCatalogShould {
                 .withId(adId)
                 .withTitle(new AdTitle("Title"))
                 .withDescription(new AdDescription("Description"))
-                .withPublicationDate("11/11/2011").build();
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
 
         adCatalog.add(adId, ad);
 
@@ -48,7 +49,8 @@ public class AdCatalogShould {
                 .withId(adId)
                 .withTitle(new AdTitle("Title"))
                 .withDescription(new AdDescription("Description"))
-                .withPublicationDate("11/11/2011").build();
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
 
         adCatalog.add(adId, ad);
         AdCatalogDTO adCatalogDTO = new AdCatalogDTO();
@@ -59,4 +61,17 @@ public class AdCatalogShould {
         Assert.assertEquals(adCatalogDTO, adCatalog.list());
     }
 
+    @Test
+    public void purge_all_ads_older_than_a_given_date() {
+        AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        Ad adOne = Ad.create()
+                .withTitle(new AdTitle("Title 1"))
+                .withDescription(new AdDescription("Description 1"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+
+        AdCatalogId expectedAdCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog expectedAdCatalog = new AdCatalog(expectedAdCatalogId);
+    }
 }
