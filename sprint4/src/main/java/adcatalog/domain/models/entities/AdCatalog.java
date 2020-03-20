@@ -2,7 +2,6 @@ package adcatalog.domain.models.entities;
 
 import adcatalog.domain.models.dto.ExpirationStrategy;
 import adcatalog.domain.models.dto.AdCatalogDTO;
-import adcatalog.domain.models.dto.AdDTO;
 import adcatalog.domain.models.valueobjects.AdCatalogId;
 import adcatalog.domain.models.valueobjects.AdId;
 import adcatalog.domain.models.valueobjects.AdPublicationDate;
@@ -78,10 +77,10 @@ public class AdCatalog {
         }
     }
 
-    public AdDTO findAdById(AdId adId) {
+    public Ad findAdById(AdId adId) {
         if (this.ads.containsKey(adId) == false ) throw new AdDoesNotExistInTheCatalog();
         this.ads.get(adId).incrementVisits();
-        return this.ads.get(adId).serialize();
+        return this.ads.get(adId);
     }
 
     public AdCatalogId getCatalogId() {

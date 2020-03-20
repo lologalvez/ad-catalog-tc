@@ -1,15 +1,14 @@
 package adcatalog.domain.models.entities;
 
 import adcatalog.domain.models.dto.AdDTO;
-import adcatalog.domain.models.valueobjects.AdDescription;
-import adcatalog.domain.models.valueobjects.AdId;
-import adcatalog.domain.models.valueobjects.AdPublicationDate;
-import adcatalog.domain.models.valueobjects.AdTitle;
+import adcatalog.domain.models.valueobjects.*;
 import adcatalog.domain.models.exceptions.EmptyDescriptionException;
 import adcatalog.domain.models.exceptions.EmptyTitleException;
 import adcatalog.domain.models.exceptions.SameTitleAndDescriptionException;
 import adcatalog.domain.models.exceptions.TitleLongerThanFiftyCharactersException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Ad {
@@ -19,6 +18,7 @@ public class Ad {
     private final AdPublicationDate publicationDate;
     private final AdId id;
     private int visits;
+    private List<UserId> subscribers;
 
     private Ad(AdTitle title, AdDescription description, AdPublicationDate publicationDate, AdId id) {
         this.title = title;
@@ -26,6 +26,7 @@ public class Ad {
         this.publicationDate = publicationDate;
         this.id = id;
         this.visits = 0;
+        this.subscribers = new ArrayList<>();
     }
 
 
@@ -44,6 +45,10 @@ public class Ad {
         adDTO.publicationDate = this.publicationDate.serialize();
         adDTO.id = this.id.serialize();
         adDTO.visits = this.visits;
+        adDTO.subscribers = new ArrayList<>();
+        for (UserId userId : this.subscribers) {
+            adDTO.subscribers.add(userId.serialize());
+        }
         return adDTO;
     }
 
@@ -53,6 +58,14 @@ public class Ad {
 
     public void incrementVisits() {
         this.visits += 1;
+    }
+
+    public void subscribe(UserId userId) {
+        this.subscribers.add(userId);
+    }
+
+    public void unsubscribe(UserId userId) {
+        this.subscribers.remove(userId);
     }
 
     public static class AdBuilder {
@@ -113,16 +126,5 @@ public class Ad {
         result = 31 * result + (publicationDate != null ? publicationDate.hashCode() : 0);
         result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Ad{" +
-                "title=" + title +
-                ", description=" + description +
-                ", publicationDate=" + publicationDate +
-                ", id=" + id +
-                ", visits=" + visits +
-                '}';
     }
 }

@@ -1,4 +1,4 @@
-package adcatalog.models.entities;
+package models.entities;
 
 import adcatalog.domain.models.dto.ExpirationStrategy;
 import adcatalog.domain.models.entities.Ad;
@@ -215,7 +215,7 @@ public class AdCatalogShould {
 
         adCatalog.add(adIdOne, adOne);
 
-        Assert.assertEquals(adOne.serialize(), adCatalog.findAdById(adIdOne));
+        Assert.assertEquals(adOne, adCatalog.findAdById(adIdOne));
     }
 
     @Test
@@ -238,7 +238,8 @@ public class AdCatalogShould {
 
         adCatalog.findAdById(adIdOne);
         adCatalog.findAdById(adIdOne);
-        AdDTO adDTO = adCatalog.findAdById(adIdOne);
+        Ad ad = adCatalog.findAdById(adIdOne);
+        AdDTO adDTO = ad.serialize();
 
         Assert.assertEquals(3, adDTO.visits);
     }

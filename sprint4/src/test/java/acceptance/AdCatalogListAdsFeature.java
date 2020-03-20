@@ -1,4 +1,4 @@
-package adcatalog.acceptance;
+package acceptance;
 
 import adcatalog.domain.services.AdCatalogService;
 import adcatalog.domain.models.dto.AdCatalogDTO;

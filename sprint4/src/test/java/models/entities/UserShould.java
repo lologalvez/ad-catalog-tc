@@ -1,4 +1,4 @@
-package adcatalog.models.entities;
+package models.entities;
 
 import adcatalog.domain.models.exceptions.AdIsNotInUsersFavsException;
 import adcatalog.domain.models.valueobjects.UserId;

@@ -70,6 +70,7 @@ public class AdCatalogService {
 
     public AdDTO getAd(AdId adId, AdCatalogId adCatalogId) {
         AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
-        return adCatalog.findAdById(adId);
+        Ad ad = adCatalog.findAdById(adId);
+        return ad.serialize();
     }
 }

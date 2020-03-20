@@ -12,11 +12,11 @@ import java.util.Objects;
 public class User {
 
     private UserId userId;
-    private List<AdId> favs = new ArrayList<>();
+    private List<AdId> favs;
 
     public User(UserId userId) {
-
         this.userId = userId;
+        this.favs = new ArrayList<>();
     }
 
     public void favAd(AdId adId) {
@@ -27,6 +27,10 @@ public class User {
     public void unFavAd(AdId adId) {
         if (!this.favs.contains(adId)) throw new AdIsNotInUsersFavsException();
         this.favs.remove(adId);
+    }
+
+    public UserId getUserId() {
+        return this.userId;
     }
 
     @Override
@@ -46,4 +50,6 @@ public class User {
         result = 31 * result + (favs != null ? favs.hashCode() : 0);
         return result;
     }
+
+
 }

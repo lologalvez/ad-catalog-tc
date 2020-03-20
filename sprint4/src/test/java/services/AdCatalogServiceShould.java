@@ -1,4 +1,4 @@
-package adcatalog.services;
+package services;
 
 import adcatalog.domain.services.AdCatalogService;
 import adcatalog.domain.models.dto.ExpirationStrategy;
