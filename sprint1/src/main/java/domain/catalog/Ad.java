@@ -1,25 +1,29 @@
 package domain.catalog;
 
 import domain.catalog.serialized.AdDTO;
-import domain.catalog.serialized.AdIdDTO;
+import domain.catalog.valueobjects.AdDescription;
+import domain.catalog.valueobjects.AdId;
+import domain.catalog.valueobjects.AdPublicationDate;
+import domain.catalog.valueobjects.AdTitle;
 import domain.exceptions.EmptyDescriptionException;
 import domain.exceptions.EmptyTitleException;
 import domain.exceptions.SameTitleAndDescriptionException;
 import domain.exceptions.TitleLongerThanFiftyCharactersException;
+
 import java.util.Objects;
 
 public class Ad {
 
-    private final String title;
-    private final String description;
-    private final String date;
+    private final AdTitle title;
+    private final AdDescription description;
+    private final AdPublicationDate publicationDate;
     private final AdId id;
 
-    private Ad(String title, String description, String date, AdId adId) {
+    private Ad(AdTitle title, AdDescription description, AdPublicationDate publicationDate, AdId id) {
         this.title = title;
         this.description = description;
-        this.date = date;
-        this.id = adId;
+        this.publicationDate = publicationDate;
+        this.id = id;
     }
 
 
@@ -29,32 +33,32 @@ public class Ad {
     }
 
     public boolean hasSameTitleAndDescription(Ad ad) {
-        return this.title == ad.title && this.description == ad.description;
+        return this.title.equals(ad.title) && this.description.equals(ad.description);
     }
 
     public AdDTO serialize() {
         AdDTO adDTO = new AdDTO();
-        adDTO.title = this.title;
-        adDTO.description = this.description;
-        adDTO.date = this.date;
+        adDTO.title = this.title.serialize();
+        adDTO.description = this.description.serialize();
+        adDTO.date = this.publicationDate.serialize();
         adDTO.id = this.id.serialize();
         return adDTO;
     }
 
     public static class AdBuilder {
-        private String title;
-        private String description;
+        private AdTitle title;
+        private AdDescription description;
         private String date;
         private AdId id;
 
-        public AdBuilder withTitle(String title) {
+        public AdBuilder withTitle(AdTitle title) {
             if (title.isEmpty()) throw new EmptyTitleException();
-            if (title.length() > 50) throw new TitleLongerThanFiftyCharactersException();
+            if (title.isLongerThanFiftyCharacters()) throw new TitleLongerThanFiftyCharactersException();
             this.title = title;
             return this;
         }
 
-        public AdBuilder withDescription(String description) {
+        public AdBuilder withDescription(AdDescription description) {
             if (description.isEmpty()) throw new EmptyDescriptionException();
             this.description = description;
             return this;
@@ -71,8 +75,10 @@ public class Ad {
         }
 
         public Ad build() {
-            if (this.title.equals(this.description)) throw new SameTitleAndDescriptionException();
-            return new Ad(this.title, this.description, this.date, this.id);
+            String serializedTitle = this.title.serialize().title;
+            String serializedDescription = this.description.serialize().description;
+            if (serializedTitle.equals(serializedDescription)) throw new SameTitleAndDescriptionException();
+            return new Ad(this.title, this.description, new AdPublicationDate(this.date), this.id);
         }
     }
 
@@ -83,17 +89,18 @@ public class Ad {
 
         Ad ad = (Ad) o;
 
-        if (title != null ? !title.equals(ad.title) : ad.title != null) return false;
-        if (description != null ? !description.equals(ad.description) : ad.description != null) return false;
-        if (date != null ? !date.equals(ad.date) : ad.date != null) return false;
-        return id != null ? id.equals(ad.id) : ad.id == null;
+        if (!Objects.equals(title, ad.title)) return false;
+        if (!Objects.equals(description, ad.description)) return false;
+        if (!Objects.equals(publicationDate, ad.publicationDate))
+            return false;
+        return Objects.equals(id, ad.id);
     }
 
     @Override
     public int hashCode() {
         int result = title != null ? title.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (publicationDate != null ? publicationDate.hashCode() : 0);
         result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
     }

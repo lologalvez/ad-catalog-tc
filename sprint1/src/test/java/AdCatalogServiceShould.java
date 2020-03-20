@@ -1,6 +1,10 @@
 import domain.AdCatalogService;
 import domain.catalog.*;
 import domain.catalog.serialized.AdCatalogDTO;
+import domain.catalog.valueobjects.AdCatalogId;
+import domain.catalog.valueobjects.AdDescription;
+import domain.catalog.valueobjects.AdId;
+import domain.catalog.valueobjects.AdTitle;
 import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
 import domain.domainservices.uuidservice.UUIDProvider;
@@ -50,7 +54,7 @@ public class AdCatalogServiceShould {
         AdCatalogId adCatalogId = new AdCatalogId(uuid);
 
         Assertions.assertThrows(AdCatalogDoesNotExistException.class,
-                () -> adCatalogService.addAd("Title", "Description", adCatalogId));
+                () -> adCatalogService.addAd(new AdTitle("Title"), new AdDescription("Description"), adCatalogId));
     }
 
     @Test
@@ -64,11 +68,11 @@ public class AdCatalogServiceShould {
         AdId adId = new AdId(uuid);
         Ad ad = Ad.create()
                 .withId(adId)
-                .withTitle("Title")
-                .withDescription("Description")
+                .withTitle(new AdTitle("Title"))
+                .withDescription(new AdDescription("Description"))
                 .withPublicationDate("11/11/2011").build();
 
-        AdId expected = adCatalogService.addAd("Title", "Description", adCatalogId);
+        AdId expected = adCatalogService.addAd(new AdTitle("Title"), new AdDescription("Description"), adCatalogId);
 
         verify(adCatalogRepository).save(adCatalog);
         Assert.assertEquals(expected, adId);
@@ -93,8 +97,8 @@ public class AdCatalogServiceShould {
         AdId adId = new AdId(uuid);
         Ad ad = Ad.create()
                 .withId(adId)
-                .withTitle("Title")
-                .withDescription("Description")
+                .withTitle(new AdTitle("Title"))
+                .withDescription(new AdDescription("Description"))
                 .withPublicationDate("11/11/2011").build();
         adCatalog.add(adId, ad);
         when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
@@ -121,8 +125,8 @@ public class AdCatalogServiceShould {
         AdId adId = new AdId(uuid);
         Ad ad = Ad.create()
                 .withId(adId)
-                .withTitle("Title")
-                .withDescription("Description")
+                .withTitle(new AdTitle("Title"))
+                .withDescription(new AdDescription("Description"))
                 .withPublicationDate("11/11/2011").build();
         adCatalog.add(adId, ad);
         AdCatalogDTO expectedAdListing = adCatalog.list();

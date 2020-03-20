@@ -1,5 +1,7 @@
 package domain.catalog;
 
+import domain.catalog.valueobjects.AdCatalogId;
+
 import java.util.Optional;
 
 public interface AdCatalogRepository {

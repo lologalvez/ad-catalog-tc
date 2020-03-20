@@ -1,4 +1,4 @@
-package domain.catalog;
+package domain.catalog.valueobjects;
 
 import domain.catalog.serialized.AdIdDTO;
 

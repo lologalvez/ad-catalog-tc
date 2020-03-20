@@ -1,11 +1,14 @@
 package domain.catalog.serialized;
 
+import domain.catalog.valueobjects.AdPublicationDate;
+import domain.catalog.valueobjects.AdTitle;
+
 import java.util.Objects;
 
 public class AdDTO {
-    public String title;
-    public String description;
-    public String date;
+    public AdTitleDTO title;
+    public AdDescriptionDTO description;
+    public AdPublicationDateDTO date;
     public AdIdDTO id;
 
     @Override

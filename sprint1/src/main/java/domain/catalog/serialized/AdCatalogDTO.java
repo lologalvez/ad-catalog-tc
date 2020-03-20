@@ -29,7 +29,7 @@ public class AdCatalogDTO {
         StringBuilder output = new StringBuilder();
         output.append("AdCatalogId: " + adCatalogId.id + "\n");
         for (AdDTO adDTO : ads) {
-            output.append("Ad: {id: " + adDTO.id.id + ", title: " + adDTO.title + ", description: " + adDTO.description + ", publication_date: " + adDTO.date + "}\n");
+            output.append("Ad: {id: " + adDTO.id.id + ", title: " + adDTO.title.title + ", description: " + adDTO.description.description + ", publication_date: " + adDTO.date.date + "}\n");
         }
         return output.toString();
     }

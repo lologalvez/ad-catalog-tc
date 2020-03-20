@@ -2,6 +2,10 @@ package domain;
 
 import domain.catalog.*;
 import domain.catalog.serialized.AdCatalogDTO;
+import domain.catalog.valueobjects.AdCatalogId;
+import domain.catalog.valueobjects.AdDescription;
+import domain.catalog.valueobjects.AdId;
+import domain.catalog.valueobjects.AdTitle;
 import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
 import domain.domainservices.uuidservice.UUIDProvider;
@@ -25,7 +29,7 @@ public class AdCatalogService {
         return adCatalogId;
     }
 
-    public AdId addAd(String title, String description, AdCatalogId adCatalogId) {
+    public AdId addAd(AdTitle title, AdDescription description, AdCatalogId adCatalogId) {
        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
 
         AdId adId = new AdId(uuidProvider.getUUID());

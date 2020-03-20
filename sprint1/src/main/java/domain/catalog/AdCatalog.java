@@ -1,6 +1,8 @@
 package domain.catalog;
 
 import domain.catalog.serialized.AdCatalogDTO;
+import domain.catalog.valueobjects.AdCatalogId;
+import domain.catalog.valueobjects.AdId;
 import domain.exceptions.AdAlreadyExistsInTheCatalogException;
 import domain.exceptions.AdDoesNotExistInTheCatalog;
 

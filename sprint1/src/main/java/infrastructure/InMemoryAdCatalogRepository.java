@@ -1,7 +1,7 @@
 package infrastructure;
 
 import domain.catalog.AdCatalog;
-import domain.catalog.AdCatalogId;
+import domain.catalog.valueobjects.AdCatalogId;
 import domain.catalog.AdCatalogRepository;
 
 import java.util.LinkedHashMap;

@@ -1,5 +1,9 @@
 import domain.catalog.*;
 import domain.catalog.serialized.AdCatalogDTO;
+import domain.catalog.valueobjects.AdCatalogId;
+import domain.catalog.valueobjects.AdDescription;
+import domain.catalog.valueobjects.AdId;
+import domain.catalog.valueobjects.AdTitle;
 import domain.exceptions.AdAlreadyExistsInTheCatalogException;
 import domain.exceptions.AdDoesNotExistInTheCatalog;
 import org.junit.Assert;
@@ -17,8 +21,8 @@ public class AdCatalogShould {
         AdId adId = new AdId(UUID.randomUUID());
         Ad ad =  Ad.create()
                 .withId(adId)
-                .withTitle("Title")
-                .withDescription("Description")
+                .withTitle(new AdTitle("Title"))
+                .withDescription(new AdDescription("Description"))
                 .withPublicationDate("11/11/2011").build();
 
         adCatalog.add(adId, ad);
@@ -42,8 +46,8 @@ public class AdCatalogShould {
         AdId adId = new AdId(UUID.randomUUID());
         Ad ad =  Ad.create()
                 .withId(adId)
-                .withTitle("Title")
-                .withDescription("Description")
+                .withTitle(new AdTitle("Title"))
+                .withDescription(new AdDescription("Description"))
                 .withPublicationDate("11/11/2011").build();
 
         adCatalog.add(adId, ad);
