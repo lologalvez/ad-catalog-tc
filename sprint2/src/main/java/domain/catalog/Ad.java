@@ -45,6 +45,10 @@ public class Ad {
         return adDTO;
     }
 
+    public boolean isOlderThan(AdPublicationDate limitDate) {
+        return this.publicationDate.isBefore(limitDate);
+    }
+
     public static class AdBuilder {
         private AdTitle title;
         private AdDescription description;

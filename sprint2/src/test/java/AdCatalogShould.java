@@ -65,13 +65,40 @@ public class AdCatalogShould {
     public void purge_all_ads_older_than_a_given_date() {
         AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
         AdCatalog adCatalog = new AdCatalog(adCatalogId);
+        AdId adIdOne = new AdId(UUID.randomUUID());
         Ad adOne = Ad.create()
+                .withId(adIdOne)
                 .withTitle(new AdTitle("Title 1"))
                 .withDescription(new AdDescription("Description 1"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("18/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+
+        AdId adIdTwo = new AdId(UUID.randomUUID());
+        Ad adTwo = Ad.create()
+                .withId(adIdTwo)
+                .withTitle(new AdTitle("Title 2"))
+                .withDescription(new AdDescription("Description 2"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("19/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+
+        AdId adIdThree = new AdId(UUID.randomUUID());
+        Ad adThree = Ad.create()
+                .withId(adIdThree)
+                .withTitle(new AdTitle("Title 3"))
+                .withDescription(new AdDescription("Description 3"))
                 .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
                 .build();
 
-        AdCatalogId expectedAdCatalogId = new AdCatalogId(UUID.randomUUID());
-        AdCatalog expectedAdCatalog = new AdCatalog(expectedAdCatalogId);
+        adCatalog.add(adIdOne, adOne);
+        adCatalog.add(adIdTwo, adTwo);
+        adCatalog.add(adIdThree, adThree);
+
+        AdCatalog expectedAdCatalog = new AdCatalog(adCatalogId);
+        expectedAdCatalog.add(adIdThree, adThree);
+
+        // Act
+        adCatalog.purgeAdsTilDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+
+        Assert.assertEquals(expectedAdCatalog, adCatalog);
     }
 }

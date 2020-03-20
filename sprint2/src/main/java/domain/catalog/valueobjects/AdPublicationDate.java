@@ -4,6 +4,7 @@ import domain.catalog.serialized.AdPublicationDateDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.Objects;
 
 public class AdPublicationDate {
@@ -17,6 +18,10 @@ public class AdPublicationDate {
         AdPublicationDateDTO adPublicationDateDTO = new AdPublicationDateDTO();
         adPublicationDateDTO.date = this.date;
         return adPublicationDateDTO;
+    }
+
+    public boolean isBefore(AdPublicationDate incomingDate) {
+        return this.date.isBefore(incomingDate.date);
     }
 
     @Override
@@ -33,6 +38,7 @@ public class AdPublicationDate {
     public int hashCode() {
         return date != null ? date.hashCode() : 0;
     }
+
 
 
 }

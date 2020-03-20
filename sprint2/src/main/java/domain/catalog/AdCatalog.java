@@ -3,6 +3,7 @@ package domain.catalog;
 import domain.catalog.serialized.AdCatalogDTO;
 import domain.catalog.valueobjects.AdCatalogId;
 import domain.catalog.valueobjects.AdId;
+import domain.catalog.valueobjects.AdPublicationDate;
 import domain.exceptions.AdAlreadyExistsInTheCatalogException;
 import domain.exceptions.AdDoesNotExistInTheCatalog;
 
@@ -46,6 +47,21 @@ public class AdCatalog {
         return adCatalogDTO;
     }
 
+    public void purgeAdsTilDate(AdPublicationDate limitDate) {
+        List<AdId> removableAdIds = new ArrayList<>();
+        for (AdId adId : ads.keySet()) {
+            Ad storedAd = this.ads.get(adId);
+            if (storedAd.isOlderThan(limitDate)) removableAdIds.add(adId);
+        }
+        for (AdId removableAdId : removableAdIds) {
+            this.ads.remove(removableAdId);
+        }
+    }
+
+    public AdCatalogId getCatalogId() {
+        return this.adCatalogId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,6 +69,7 @@ public class AdCatalog {
 
         AdCatalog adCatalog = (AdCatalog) o;
 
+        if (maxAdLimit != adCatalog.maxAdLimit) return false;
         if (!Objects.equals(ads, adCatalog.ads)) return false;
         return Objects.equals(adCatalogId, adCatalog.adCatalogId);
     }
@@ -60,11 +77,8 @@ public class AdCatalog {
     @Override
     public int hashCode() {
         int result = ads != null ? ads.hashCode() : 0;
+        result = 31 * result + maxAdLimit;
         result = 31 * result + (adCatalogId != null ? adCatalogId.hashCode() : 0);
         return result;
-    }
-
-    public AdCatalogId getCatalogId() {
-        return this.adCatalogId;
     }
 }
