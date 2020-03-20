@@ -2,6 +2,7 @@ package domain;
 
 import domain.catalog.*;
 import domain.catalog.serialized.AdCatalogDTO;
+import domain.catalog.serialized.AdDTO;
 import domain.catalog.valueobjects.*;
 import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
@@ -62,5 +63,10 @@ public class AdCatalogService {
         AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
         adCatalog.purgeAdsOlderThanDate(limitDate);
         adCatalogRepository.save(adCatalog);
+    }
+
+    public AdDTO getAd(AdId adId, AdCatalogId adCatalogId) {
+        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
+        return adCatalog.findAdById(adId);
     }
 }

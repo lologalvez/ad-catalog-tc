@@ -1,6 +1,7 @@
 import domain.AdCatalogService;
 import domain.catalog.*;
 import domain.catalog.serialized.AdCatalogDTO;
+import domain.catalog.serialized.AdDTO;
 import domain.catalog.valueobjects.*;
 import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
@@ -194,4 +195,28 @@ public class AdCatalogServiceShould {
 
     }
 
+    @Test
+    public void retrieve_a_specific_ad_and_return_it_as_message() {
+        UUID uuid = UUID.randomUUID();
+        AdCatalogId adCatalogId = new AdCatalogId(uuid);
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(100)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
+        AdId adId = new AdId(uuid);
+        Ad ad = Ad.create()
+                .withId(adId)
+                .withTitle(new AdTitle("Title"))
+                .withDescription(new AdDescription("Description"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+        adCatalog.add(adId, ad);
+        when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
+
+        AdDTO adDTO = adCatalogService.getAd(adId, adCatalogId);
+
+        Assert.assertEquals(ad.serialize(), adDTO);
+    }
 }

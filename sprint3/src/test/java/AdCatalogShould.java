@@ -210,12 +210,7 @@ public class AdCatalogShould {
 
         adCatalog.add(adIdOne, adOne);
 
-        Assert.assertEquals(adOne, adCatalog.findAdById(adIdOne));
-
-
-
-
-
+        Assert.assertEquals(adOne.serialize(), adCatalog.findAdById(adIdOne));
     }
 
 

@@ -1,6 +1,7 @@
 package domain.catalog;
 
 import domain.catalog.serialized.AdCatalogDTO;
+import domain.catalog.serialized.AdDTO;
 import domain.catalog.valueobjects.AdCatalogId;
 import domain.catalog.valueobjects.AdId;
 import domain.catalog.valueobjects.AdPublicationDate;
@@ -20,7 +21,7 @@ public class AdCatalog {
         this.maxAdLimit = maxAdLimit;
         this.expirationStrategy = expirationStrategy;
         this.adCatalogId = id;
-        this.ads = new HashMap<>();
+        this.ads = new LinkedHashMap<>();
     }
 
     public static AdCatalogBuilder create() {
@@ -75,9 +76,9 @@ public class AdCatalog {
         }
     }
 
-    public Ad findAdById(AdId adId) {
+    public AdDTO findAdById(AdId adId) {
         if (this.ads.containsKey(adId) == false ) throw new AdDoesNotExistInTheCatalog();
-        return this.ads.get(adId);
+        return this.ads.get(adId).serialize();
     }
 
     public AdCatalogId getCatalogId() {
