@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.verify;
@@ -56,7 +57,7 @@ public class AdCatalogServiceShould {
         UUID uuid = UUID.randomUUID();
         AdCatalogId adCatalogId = new AdCatalogId(uuid);
         AdCatalog adCatalog = new AdCatalog(adCatalogId);
-        when(adCatalogRepository.findById(adCatalogId)).thenReturn(adCatalog);
+        when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
         when(uuidProvider.getUUID()).thenReturn(uuid);
         when(timeService.getDate()).thenReturn("11/11/2011");
         AdId adId = new AdId(uuid);
@@ -95,7 +96,7 @@ public class AdCatalogServiceShould {
                 .withDescription("Description")
                 .withPublicationDate("11/11/2011").build();
         adCatalog.add(adId, ad);
-        when(adCatalogRepository.findById(adCatalogId)).thenReturn(adCatalog);
+        when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
 
         adCatalogService.remove(adId, adCatalogId);
 

@@ -5,6 +5,8 @@ import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
 import domain.domainservices.uuidservice.UUIDProvider;
 
+import java.util.Optional;
+
 public class AdCatalogService {
 
     private final AdCatalogRepository adCatalogRepository;
@@ -25,8 +27,7 @@ public class AdCatalogService {
     }
 
     public AdId add(String title, String description, AdCatalogId adCatalogId) {
-        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId);
-        if (adCatalog == null) throw new AdCatalogDoesNotExistException();
+       AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
 
         AdId adId = new AdId(uuidProvider.getUUID());
         Ad ad = Ad.create()
@@ -41,11 +42,9 @@ public class AdCatalogService {
     }
 
     public void remove(AdId adId, AdCatalogId adCatalogId) {
-        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId);
-        if (adCatalog == null) throw new AdCatalogDoesNotExistException();
+        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
         adCatalog.remove(adId);
         adCatalogRepository.save(adCatalog);
-
     }
 
 
