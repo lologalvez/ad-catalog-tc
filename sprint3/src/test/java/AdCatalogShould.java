@@ -176,4 +176,20 @@ public class AdCatalogShould {
 
         Assert.assertEquals(expectedAdCatalog.serialize().ads, adCatalog.serialize().ads);
     }
+
+    @Test
+    public void return_an_error_when_trying_to_retrieve_an_ad_by_id_and_it_does_not_exist_in_catalog() {
+        AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(2)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
+
+        AdId adId = new AdId(UUID.randomUUID());
+
+       Assertions.assertThrows(AdDoesNotExistInTheCatalog.class, () -> adCatalog.findAdById(adId));
+    }
+
+
 }

@@ -39,7 +39,7 @@ public class AdCatalog {
         this.ads.put(adId, ad);
     }
 
-    public AdId findOldestAd() {
+    private AdId findOldestAd() {
         List<Map.Entry<AdId, Ad>> adsList = new LinkedList<>(this.ads.entrySet());
         Collections.sort(adsList, Comparator.comparing(entry -> entry.getValue().serialize().publicationDate.date));
         return adsList.get(0).getKey();
@@ -75,9 +75,14 @@ public class AdCatalog {
         }
     }
 
+    public void findAdById(AdId adId) {
+        if (this.ads.containsKey(adId) == false ) throw new AdDoesNotExistInTheCatalog();
+    }
+
     public AdCatalogId getCatalogId() {
         return this.adCatalogId;
     }
+
 
     public static class AdCatalogBuilder {
 
