@@ -38,7 +38,7 @@ public class AdCatalogServiceShould {
         AdCatalog adCatalog = new AdCatalog(adCatalogId);
         when(uuidProvider.getUUID()).thenReturn(uuid);
 
-        adCatalogService.create();
+        adCatalogService.createCatalog();
 
         verify(adCatalogRepository).save(adCatalog);
     }
@@ -49,7 +49,7 @@ public class AdCatalogServiceShould {
         AdCatalogId adCatalogId = new AdCatalogId(uuid);
 
         Assertions.assertThrows(AdCatalogDoesNotExistException.class,
-                () -> adCatalogService.add("Title", "Description", adCatalogId));
+                () -> adCatalogService.addAd("Title", "Description", adCatalogId));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class AdCatalogServiceShould {
                 .withDescription("Description")
                 .withPublicationDate("11/11/2011").build();
 
-        AdId expected = adCatalogService.add("Title", "Description", adCatalogId);
+        AdId expected = adCatalogService.addAd("Title", "Description", adCatalogId);
 
         verify(adCatalogRepository).save(adCatalog);
         Assert.assertEquals(expected, adId);
@@ -81,7 +81,7 @@ public class AdCatalogServiceShould {
 
 
         Assertions.assertThrows(AdCatalogDoesNotExistException.class,
-                () -> adCatalogService.remove(adId, adCatalogId));
+                () -> adCatalogService.removeAd(adId, adCatalogId));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class AdCatalogServiceShould {
         adCatalog.add(adId, ad);
         when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
 
-        adCatalogService.remove(adId, adCatalogId);
+        adCatalogService.removeAd(adId, adCatalogId);
 
         verify(adCatalogRepository).save(adCatalog);
     }

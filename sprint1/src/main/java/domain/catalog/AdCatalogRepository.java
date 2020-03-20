@@ -7,5 +7,4 @@ public interface AdCatalogRepository {
     void save(AdCatalog adCatalog);
 
     Optional<AdCatalog> findById(AdCatalogId adCatalogId);
-
 }

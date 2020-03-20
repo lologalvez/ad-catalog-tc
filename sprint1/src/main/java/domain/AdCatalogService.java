@@ -19,14 +19,14 @@ public class AdCatalogService {
         this.uuidProvider = uuidProvider;
     }
 
-    public AdCatalogId create() {
+    public AdCatalogId createCatalog() {
         AdCatalogId adCatalogId = new AdCatalogId(uuidProvider.getUUID());
         AdCatalog adCatalog = new AdCatalog(adCatalogId);
         adCatalogRepository.save(adCatalog);
         return adCatalogId;
     }
 
-    public AdId add(String title, String description, AdCatalogId adCatalogId) {
+    public AdId addAd(String title, String description, AdCatalogId adCatalogId) {
        AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
 
         AdId adId = new AdId(uuidProvider.getUUID());
@@ -41,12 +41,10 @@ public class AdCatalogService {
         return adId;
     }
 
-    public void remove(AdId adId, AdCatalogId adCatalogId) {
+    public void removeAd(AdId adId, AdCatalogId adCatalogId) {
         AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
         adCatalog.remove(adId);
         adCatalogRepository.save(adCatalog);
     }
-
-
 
 }

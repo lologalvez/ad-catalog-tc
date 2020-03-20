@@ -48,4 +48,8 @@ public class AdCatalog {
         result = 31 * result + (adCatalogId != null ? adCatalogId.hashCode() : 0);
         return result;
     }
+
+    public AdCatalogId getCatalogId() {
+        return this.adCatalogId;
+    }
 }

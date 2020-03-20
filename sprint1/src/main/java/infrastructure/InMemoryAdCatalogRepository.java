@@ -14,7 +14,7 @@ public class InMemoryAdCatalogRepository implements AdCatalogRepository {
 
     @Override
     public void save(AdCatalog adCatalog) {
-
+        this.adCatalogs.put(adCatalog.getCatalogId(), adCatalog);
     }
 
     @Override
