@@ -1,4 +1,5 @@
 import domain.catalog.*;
+import domain.catalog.serialized.AdCatalogDTO;
 import domain.exceptions.AdAlreadyExistsInTheCatalogException;
 import domain.exceptions.AdDoesNotExistInTheCatalog;
 import org.junit.Assert;
@@ -45,12 +46,13 @@ public class AdCatalogShould {
                 .withDescription("Description")
                 .withPublicationDate("11/11/2011").build();
 
-        Map<AdId, Ad> adMap = new LinkedHashMap<>();
-        adMap.put(adId, ad);
-        AdListing adListing = new AdListing(adMap);
         adCatalog.add(adId, ad);
+        AdCatalogDTO adCatalogDTO = new AdCatalogDTO();
+        adCatalogDTO.adCatalogId = adCatalogId.serialize();
+        adCatalogDTO.ads = new ArrayList<>();
+        adCatalogDTO.ads.add(ad.serialize());
 
-        Assert.assertEquals(adListing, adCatalog.list());
+        Assert.assertEquals(adCatalogDTO, adCatalog.list());
     }
 
 }

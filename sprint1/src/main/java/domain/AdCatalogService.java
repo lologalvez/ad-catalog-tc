@@ -1,6 +1,7 @@
 package domain;
 
 import domain.catalog.*;
+import domain.catalog.serialized.AdCatalogDTO;
 import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
 import domain.domainservices.uuidservice.UUIDProvider;
@@ -45,7 +46,7 @@ public class AdCatalogService {
         adCatalogRepository.save(adCatalog);
     }
 
-    public AdListing listAds(AdCatalogId adCatalogId) {
+    public AdCatalogDTO listAds(AdCatalogId adCatalogId) {
         AdCatalog adCatalog = adCatalogRepository.findById(adCatalogId).orElseThrow(AdCatalogDoesNotExistException::new);
         return adCatalog.list();
     }

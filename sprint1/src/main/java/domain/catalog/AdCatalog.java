@@ -1,5 +1,6 @@
 package domain.catalog;
 
+import domain.catalog.serialized.AdCatalogDTO;
 import domain.exceptions.AdAlreadyExistsInTheCatalogException;
 import domain.exceptions.AdDoesNotExistInTheCatalog;
 
@@ -27,8 +28,18 @@ public class AdCatalog {
         this.ads.remove(adId);
     }
 
-    public AdListing list() {
-        return new AdListing(this.ads);
+    public AdCatalogDTO list() {
+        return this.serialize();
+    }
+
+    private AdCatalogDTO serialize() {
+        AdCatalogDTO adCatalogDTO = new AdCatalogDTO();
+        adCatalogDTO.adCatalogId = this.adCatalogId.serialize();
+        adCatalogDTO.ads = new ArrayList<>();
+        for (AdId adId : ads.keySet()) {
+            adCatalogDTO.ads.add(ads.get(adId).serialize());
+        }
+        return adCatalogDTO;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package domain.catalog;
 
+import domain.catalog.serialized.AdCatalogIdDTO;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,5 +25,11 @@ public class AdCatalogId {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    public AdCatalogIdDTO serialize() {
+        AdCatalogIdDTO adCatalogIdDTO = new AdCatalogIdDTO();
+        adCatalogIdDTO.id = this.id.toString();
+        return adCatalogIdDTO;
     }
 }

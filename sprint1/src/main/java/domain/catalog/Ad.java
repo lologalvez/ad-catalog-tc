@@ -1,5 +1,7 @@
 package domain.catalog;
 
+import domain.catalog.serialized.AdDTO;
+import domain.catalog.serialized.AdIdDTO;
 import domain.exceptions.EmptyDescriptionException;
 import domain.exceptions.EmptyTitleException;
 import domain.exceptions.SameTitleAndDescriptionException;
@@ -28,6 +30,15 @@ public class Ad {
 
     public boolean hasSameTitleAndDescription(Ad ad) {
         return this.title == ad.title && this.description == ad.description;
+    }
+
+    public AdDTO serialize() {
+        AdDTO adDTO = new AdDTO();
+        adDTO.title = this.title;
+        adDTO.description = this.description;
+        adDTO.date = this.date;
+        adDTO.id = this.id.serialize();
+        return adDTO;
     }
 
     public static class AdBuilder {

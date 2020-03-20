@@ -1,13 +1,21 @@
 package domain.catalog;
 
+import domain.catalog.serialized.AdIdDTO;
+
 import java.util.Objects;
 import java.util.UUID;
 
 public class AdId {
-    private UUID randomUUID;
+    private UUID id;
 
-    public AdId(UUID randomUUID) {
-        this.randomUUID = randomUUID;
+    public AdId(UUID id) {
+        this.id = id;
+    }
+
+    public AdIdDTO serialize() {
+        AdIdDTO adIdDTO = new AdIdDTO();
+        adIdDTO.id = this.id.toString();
+        return adIdDTO;
     }
 
     @Override
@@ -17,11 +25,12 @@ public class AdId {
 
         AdId adId = (AdId) o;
 
-        return Objects.equals(randomUUID, adId.randomUUID);
+        return Objects.equals(id, adId.id);
     }
 
     @Override
     public int hashCode() {
-        return randomUUID != null ? randomUUID.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
     }
+
 }

@@ -1,5 +1,6 @@
 import domain.AdCatalogService;
 import domain.catalog.*;
+import domain.catalog.serialized.AdCatalogDTO;
 import domain.exceptions.AdCatalogDoesNotExistException;
 import domain.domainservices.timeservice.TimeService;
 import domain.domainservices.uuidservice.UUIDProvider;
@@ -124,10 +125,10 @@ public class AdCatalogServiceShould {
                 .withDescription("Description")
                 .withPublicationDate("11/11/2011").build();
         adCatalog.add(adId, ad);
-        AdListing expectedAdListing = adCatalog.list();
+        AdCatalogDTO expectedAdListing = adCatalog.list();
         when(adCatalogRepository.findById(adCatalogId)).thenReturn(Optional.ofNullable(adCatalog));
 
-        AdListing adListing = adCatalogService.listAds(adCatalogId);
+        AdCatalogDTO adListing = adCatalogService.listAds(adCatalogId);
 
         Assert.assertEquals(expectedAdListing, adListing);
     }
