@@ -1,5 +1,6 @@
 import domain.catalog.*;
 import domain.catalog.serialized.AdCatalogDTO;
+import domain.catalog.serialized.AdDTO;
 import domain.catalog.valueobjects.*;
 import domain.exceptions.AdAlreadyExistsInTheCatalogException;
 import domain.exceptions.AdDoesNotExistInTheCatalog;
@@ -127,7 +128,7 @@ public class AdCatalogShould {
     }
 
     @Test
-    public void remove_oldest_ad_when_trying_to_add_an_ad_to_the_catalogue_and_max_ad_limit_is_reached() {
+    public void remove_oldest_ad_when_trying_to_add_an_ad_to_the_catalogue_and_both_max_ad_limit_is_reached_and_expiration_strategy_is_set_to_oldest() {
         AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
         AdCatalog adCatalog = AdCatalog.create()
                 .withId(adCatalogId)
@@ -213,5 +214,81 @@ public class AdCatalogShould {
         Assert.assertEquals(adOne.serialize(), adCatalog.findAdById(adIdOne));
     }
 
+    @Test
+    public void increment_a_counter_of_visits_on_ad_everytime_an_ad_is_retrieved() {
+        AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(2)
+                .withExpirationStrategy(ExpirationStrategy.OLDEST)
+                .build();
 
+        AdId adIdOne = new AdId(UUID.randomUUID());
+        Ad adOne = Ad.create()
+                .withId(adIdOne)
+                .withTitle(new AdTitle("Title 1"))
+                .withDescription(new AdDescription("Description 1"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("19/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+        adCatalog.add(adIdOne, adOne);
+
+        adCatalog.findAdById(adIdOne);
+        adCatalog.findAdById(adIdOne);
+        AdDTO adDTO = adCatalog.findAdById(adIdOne);
+
+        Assert.assertEquals(3, adDTO.visits);
+    }
+
+    @Test
+    public void remove_less_accessed_ad_when_trying_to_add_an_ad_to_the_catalogue_and_both_max_ad_limit_is_reached_and_expiration_strategy_is_set_to_less_accessed() {
+        AdCatalogId adCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog adCatalog = AdCatalog.create()
+                .withId(adCatalogId)
+                .withAdStorageLimit(2)
+                .withExpirationStrategy(ExpirationStrategy.LESS_ACCESSED)
+                .build();
+
+        AdId adIdOne = new AdId(UUID.randomUUID());
+        Ad adOne = Ad.create()
+                .withId(adIdOne)
+                .withTitle(new AdTitle("Title 1"))
+                .withDescription(new AdDescription("Description 1"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("18/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+
+        AdId adIdTwo = new AdId(UUID.randomUUID());
+        Ad adTwo = Ad.create()
+                .withId(adIdTwo)
+                .withTitle(new AdTitle("Title 2"))
+                .withDescription(new AdDescription("Description 2"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("19/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+
+        AdId adIdThree = new AdId(UUID.randomUUID());
+        Ad adThree = Ad.create()
+                .withId(adIdThree)
+                .withTitle(new AdTitle("Title 3"))
+                .withDescription(new AdDescription("Description 3"))
+                .withPublicationDate(new AdPublicationDate(LocalDate.parse("20/03/2020", DateTimeFormatter.ofPattern("dd/MM/yyyy"))))
+                .build();
+
+        adCatalog.add(adIdOne, adOne);
+        adCatalog.add(adIdTwo, adTwo);
+        adCatalog.findAdById(adIdOne);
+        adCatalog.findAdById(adIdOne);
+
+        AdCatalogId expectedAdCatalogId = new AdCatalogId(UUID.randomUUID());
+        AdCatalog expectedAdCatalog =AdCatalog.create()
+                .withId(expectedAdCatalogId)
+                .withAdStorageLimit(2)
+                .withExpirationStrategy(ExpirationStrategy.LESS_ACCESSED)
+                .build();
+
+        expectedAdCatalog.add(adIdOne, adOne);
+        expectedAdCatalog.add(adIdThree, adThree);
+
+        adCatalog.add(adIdThree, adThree);
+
+        Assert.assertEquals(expectedAdCatalog.serialize().ads, adCatalog.serialize().ads);
+    }
 }

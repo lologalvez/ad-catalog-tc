@@ -18,12 +18,14 @@ public class Ad {
     private final AdDescription description;
     private final AdPublicationDate publicationDate;
     private final AdId id;
+    private int visits;
 
     private Ad(AdTitle title, AdDescription description, AdPublicationDate publicationDate, AdId id) {
         this.title = title;
         this.description = description;
         this.publicationDate = publicationDate;
         this.id = id;
+        this.visits = 0;
     }
 
 
@@ -41,11 +43,16 @@ public class Ad {
         adDTO.description = this.description.serialize();
         adDTO.publicationDate = this.publicationDate.serialize();
         adDTO.id = this.id.serialize();
+        adDTO.visits = this.visits;
         return adDTO;
     }
 
     public boolean isOlderThan(AdPublicationDate limitDate) {
         return this.publicationDate.isBefore(limitDate);
+    }
+
+    public void incrementVisits() {
+        this.visits += 1;
     }
 
     public static class AdBuilder {
@@ -106,5 +113,16 @@ public class Ad {
         result = 31 * result + (publicationDate != null ? publicationDate.hashCode() : 0);
         result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Ad{" +
+                "title=" + title +
+                ", description=" + description +
+                ", publicationDate=" + publicationDate +
+                ", id=" + id +
+                ", visits=" + visits +
+                '}';
     }
 }

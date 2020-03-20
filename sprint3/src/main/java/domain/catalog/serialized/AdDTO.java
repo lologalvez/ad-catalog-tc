@@ -7,6 +7,7 @@ public class AdDTO {
     public AdDescriptionDTO description;
     public AdPublicationDateDTO publicationDate;
     public AdIdDTO id;
+    public int visits;
 
     @Override
     public boolean equals(Object o) {
@@ -17,7 +18,9 @@ public class AdDTO {
 
         if (!Objects.equals(title, adDTO.title)) return false;
         if (!Objects.equals(description, adDTO.description)) return false;
-        return Objects.equals(publicationDate, adDTO.publicationDate);
+        if (!Objects.equals(publicationDate, adDTO.publicationDate))
+            return false;
+        return Objects.equals(id, adDTO.id);
     }
 
     @Override
@@ -25,6 +28,9 @@ public class AdDTO {
         int result = title != null ? title.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (publicationDate != null ? publicationDate.hashCode() : 0);
+        result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
     }
 }
+
+

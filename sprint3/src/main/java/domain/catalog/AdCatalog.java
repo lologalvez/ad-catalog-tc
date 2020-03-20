@@ -34,15 +34,16 @@ public class AdCatalog {
         }
 
         if (this.ads.size() == this.maxAdLimit && !this.ads.isEmpty()) {
-            AdId adIdToBeRemoved = this.findOldestAd();
+            AdId adIdToBeRemoved = this.findAdToBeExpired();
             this.ads.remove(adIdToBeRemoved);
         }
         this.ads.put(adId, ad);
     }
 
-    private AdId findOldestAd() {
+    private AdId findAdToBeExpired() {
         List<Map.Entry<AdId, Ad>> adsList = new LinkedList<>(this.ads.entrySet());
-        Collections.sort(adsList, Comparator.comparing(entry -> entry.getValue().serialize().publicationDate.date));
+        if (this.expirationStrategy == ExpirationStrategy.OLDEST) Collections.sort(adsList, Comparator.comparing(entry -> entry.getValue().serialize().publicationDate.date));
+        if (this.expirationStrategy == ExpirationStrategy.LESS_ACCESSED) Collections.sort(adsList, Comparator.comparing(entry -> entry.getValue().serialize().visits));
         return adsList.get(0).getKey();
     }
 
@@ -78,6 +79,7 @@ public class AdCatalog {
 
     public AdDTO findAdById(AdId adId) {
         if (this.ads.containsKey(adId) == false ) throw new AdDoesNotExistInTheCatalog();
+        this.ads.get(adId).incrementVisits();
         return this.ads.get(adId).serialize();
     }
 
